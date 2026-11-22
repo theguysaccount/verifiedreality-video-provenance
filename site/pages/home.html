@@ -1,0 +1,118 @@
+<!--
+{
+  "path": "",
+  "title": "Existed By: prove a video existed by a date, without uploading it",
+  "description": "Free: fingerprint a video on your device and timestamp it on Bitcoin through OpenTimestamps. Anyone can later check the file existed, unchanged, by that time. The video is never uploaded.",
+  "og": "home",
+  "nav": "",
+  "scripts": ["stamp.js"],
+  "body_class": "app",
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Existed By",
+      "url": "{{site_url}}/",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript",
+      "isAccessibleForFree": true,
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "description": "Fingerprints a file in the browser and timestamps the fingerprint on Bitcoin through the public OpenTimestamps calendars, returning a standard .ots proof and a check link."
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": "{{faq}}"
+    }
+  ],
+  "faq": [
+    ["Does a timestamp prove my video is real?", "No. It proves that this exact file existed no later than the time shown. It says nothing about who made it, where, or whether what it shows happened. What it can do is rule out a later fabrication of that same file: footage stamped before a deepfake of it existed can't have been made from that deepfake."],
+    ["Is my video uploaded?", "No. The page reads the file on your device and computes its SHA-256 fingerprint. What leaves your device is a hash of that fingerprint mixed with a random number, so the calendars can't even tell which file it is."],
+    ["How long until the proof is complete?", "The calendars collect submissions and anchor them in a Bitcoin transaction, usually within a few hours. Until then the proof is pending. Open the proof again later on the check page and it completes itself; or run 'ots upgrade' with the official client."],
+    ["What do I need to keep?", "The original file, exactly as it was when you stamped it, and the .ots proof file. A copy that has been edited, trimmed, compressed or re-uploaded has a different fingerprint and won't match."],
+    ["Why doesn't the video I downloaded from social media match?", "Platforms re-encode uploads, which changes every byte. A timestamp covers the exact file that was stamped. Ask for the original file; a mismatch on its own doesn't mean the video was doctored."],
+    ["Who else can verify a proof?", "Anyone. Proofs are standard OpenTimestamps files: this site's check page reads them, so does the official ots client (with a Bitcoin node), and so do other OpenTimestamps tools. Nothing depends on this site staying online."],
+    ["Does it cost anything?", "No. The OpenTimestamps calendars are free public services, and this site is free and open source."]
+  ]
+}
+-->
+<section class="hero">
+  <h1>Prove a video existed by a date.</h1>
+  <p class="lede">Fingerprint your video on your device and anchor the fingerprint in Bitcoin through the free OpenTimestamps calendars. Later, anyone can check that your file existed, unchanged, by that time. The video never leaves your device.</p>
+</section>
+
+<section class="card tool" aria-labelledby="tool-h">
+  <h2 id="tool-h" class="sr">Stamp a file</h2>
+  <div id="drop" class="drop">
+    <p><label class="btn big" for="file">Choose a video</label><input id="file" class="sr" type="file"></p>
+    <p class="small">or drop it here. Any file works, any size. It's read on your device and never uploaded.</p>
+  </div>
+
+  <div id="work" hidden>
+    <p><b id="w-name"></b> <span id="w-size" class="small"></span></p>
+    <ol class="live-steps">
+      <li id="s-hash"><b>Fingerprint the file on this device</b><br><progress id="progress" max="1" value="0" aria-label="Fingerprinting progress"></progress><br><span class="small">SHA-256: <span id="w-hash" class="mono break"></span></span></li>
+      <li id="s-send"><b>Send a blinded fingerprint to public timestamp calendars</b><ul id="cal-list" class="cal-list"></ul></li>
+    </ol>
+    <p id="w-error" class="check bad" role="alert" hidden></p>
+  </div>
+
+  <div id="result" hidden>
+    <h2 tabindex="-1">Stamped</h2>
+    <p id="r-status" class="check warn"></p>
+    <p>Fingerprint (SHA-256) of the file you stamped:<br><span id="r-hash" class="mono break"></span></p>
+    <div class="btn-row">
+      <button id="r-download" class="btn" type="button">Download the proof (.ots)</button>
+      <button id="r-copy" class="btn secondary" type="button">Copy check link</button>
+      <button id="r-share" class="btn secondary" type="button" hidden>Share…</button>
+    </div>
+    <p><label class="small" for="r-link">Check link: anyone who opens it sees the proof and can compare their copy of the file.</label><br><input id="r-link" class="mono" type="text" readonly></p>
+    <p class="small" id="r-saved"></p>
+    <p class="small"><b>Keep the original file unchanged, with its proof.</b> An edited, trimmed or re-encoded copy has a different fingerprint and won't match. Send the proof or the link along with the original when it matters.</p>
+    <p><button id="r-another" class="btn small secondary" type="button">Stamp another file</button></p>
+  </div>
+</section>
+
+<section id="mine-wrap" hidden>
+  <h2>Your stamps in this browser</h2>
+  <ul id="mine" class="mine"></ul>
+  <p class="small">Kept in this browser's storage only. Pending stamps complete themselves when you come back after a few hours. Download each proof: clearing your browser deletes this list.</p>
+</section>
+
+<section>
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li><b>Fingerprint.</b> Your browser computes the file's SHA-256 hash: 64 characters that change completely if a single byte of the file changes.</li>
+    <li><b>Anchor.</b> The page mixes the fingerprint with a random number, hashes it again and sends only that to the public <a href="https://opentimestamps.org/">OpenTimestamps</a> calendars. They combine it with everyone else's submissions into one hash that goes into a Bitcoin transaction, usually within a few hours.</li>
+    <li><b>Check.</b> The proof (.ots) links your file's fingerprint, step by step, to a Bitcoin block. Anyone can verify it on <a href="check/">the check page</a> or with the official client, and compare their copy of the file.</li>
+  </ol>
+  <p><a href="{{sample_link}}">See a sample proof</a> for <a href="sample/sample-clip.webm" download>this 4-second sample clip</a>, then drop the clip on the check page to compare it.</p>
+</section>
+
+<section class="limits">
+  <h2>What a timestamp proves, and what it doesn't</h2>
+  <ul>
+    <li><b>It proves</b> that this exact file existed no later than the time of a Bitcoin block (block times are accurate to within an hour or two).</li>
+    <li><b>It doesn't prove</b> that the video is true, who made it, where, or when it was recorded. A fake stamped today is a fake with a timestamp.</li>
+    <li><b>It covers one exact file.</b> Re-encoded, trimmed or edited copies don't match. That's the point: no one can quietly change a stamped file.</li>
+  </ul>
+  <p>Its real use is order of events: footage stamped before a manipulated version of it appeared, or before a dispute began, can be shown to predate them. <a href="how-it-works/">More on how it works and its limits</a></p>
+</section>
+
+{{money_slot}}
+
+<section>
+  <h2>Questions</h2>
+  {{faq_html}}
+</section>
+
+<section>
+  <h2>Guides</h2>
+  <ul class="guide-list">
+    <li><a href="guides/prove-a-video-is-original/"><b>How to prove a video is the original</b></a>: what you can show, and what nobody can.</li>
+    <li><a href="guides/why-reuploaded-videos-dont-match/"><b>Why a re-uploaded video doesn't match its timestamp</b></a></li>
+    <li><a href="guides/timestamps-vs-content-credentials/"><b>Timestamps and Content Credentials (C2PA)</b></a>: how they differ and fit together.</li>
+    <li><a href="guides/verify-an-opentimestamps-proof/"><b>Verify a proof yourself</b></a> with the official client and your own Bitcoin node.</li>
+  </ul>
+</section>

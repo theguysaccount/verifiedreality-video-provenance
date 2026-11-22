@@ -1,0 +1,64 @@
+<!--
+{
+  "path": "how-it-works/",
+  "title": "How Existed By works, what it proves, and what it can't | Existed By",
+  "description": "Fingerprints, the OpenTimestamps calendars, Bitcoin, what a timestamp proves and doesn't, who you're trusting, and how to check that your video is never uploaded.",
+  "og": "home",
+  "nav": "how-it-works/",
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "How Existed By works, what it proves, and what it can't",
+      "url": "{{site_url}}/how-it-works/",
+      "dateModified": "2026-11-22",
+      "author": {"@type": "Organization", "name": "Existed By"},
+      "publisher": {"@type": "Organization", "name": "Existed By"}
+    }
+  ]
+}
+-->
+<h1>How it works, and its limits</h1>
+<p class="lede">Existed By is a free front end to <a href="https://opentimestamps.org/">OpenTimestamps</a>, an open standard for anchoring a file's fingerprint in Bitcoin. This page explains every step, what the result proves, and whom you're trusting.</p>
+
+<h2>1. The fingerprint</h2>
+<p>Your browser reads the file in pieces and computes its SHA-256 hash (<a href="https://csrc.nist.gov/pubs/fips/180-4/upd1/final">FIPS 180-4</a>), a 256-bit number written as 64 hexadecimal characters. Changing a single byte of the file changes the fingerprint completely, and nobody knows how to make a different file with the same fingerprint. Hashing happens in a background thread on your device; a 2 GB video takes seconds to a minute depending on the device.</p>
+
+<h2>2. The calendars</h2>
+<p>The page appends 16 random bytes to the fingerprint, hashes the result again, and sends only that 32-byte value to three public OpenTimestamps calendars run by independent operators (<code>a.pool.opentimestamps.org</code>, <code>b.pool.opentimestamps.org</code>, <code>a.pool.eternitywall.com</code>). Because of the random bytes, a calendar can't tell which file it is, or even whether two submissions are the same file.</p>
+<p>Each calendar answers at once with a receipt: the first steps of a path from your value to a hash it promises to anchor. Every so often, usually within a few hours, each calendar combines everything it has received into a single hash and puts it in a Bitcoin transaction. Several calendars means the proof completes even if one of them disappears.</p>
+
+<h2>3. Bitcoin</h2>
+<p>Once that transaction is in a block, the calendar can supply the rest of the path: from your value, through the transaction, to the block header's Merkle root. That makes the proof complete. A complete proof no longer depends on any calendar, or on this site: only on Bitcoin's block chain.</p>
+<p>The check page verifies a complete proof by fetching the block header at the stated height from two block explorers (Blockstream and mempool.space), checking that both give the same header, that the header carries real Bitcoin proof of work, and that the proof's path leads exactly to its Merkle root. The time shown is the block's timestamp. Bitcoin only requires block times to be roughly right: they are <a href="https://en.bitcoin.it/wiki/Block_timestamp">accurate only to within an hour or two</a>.</p>
+
+<h2>What a timestamp proves</h2>
+<ul>
+  <li>That a file with this exact fingerprint existed <b>no later than</b> the block time. It may have existed long before.</li>
+  <li>That a copy matching the fingerprint is <b>byte for byte</b> that file.</li>
+</ul>
+<h2>What it doesn't prove</h2>
+<ul>
+  <li><b>That the video is true.</b> Staged, edited or AI-generated footage can be stamped like anything else.</li>
+  <li><b>Who made it, where, or when it was recorded.</b> Only when the file existed by.</li>
+  <li><b>Anything about copies that differ.</b> Re-encoding, trimming or compressing changes the fingerprint. A mismatch doesn't mean tampering; it means this proof can't vouch for that copy. <a href="{{root}}guides/why-reuploaded-videos-dont-match/">Why re-uploads don't match</a></li>
+</ul>
+<p>So the useful claims are about order: “this footage existed before that manipulated version appeared”, or “this file is unchanged since the day of the event”. For capture details (device, edits, signer) look at <a href="{{root}}guides/timestamps-vs-content-credentials/">Content Credentials</a>, which work well alongside a timestamp.</p>
+
+<h2>Whom you're trusting</h2>
+<ul>
+  <li><b>Pending proofs</b> depend on the calendars keeping their promise to anchor your submission. Using three independent calendars covers one or two failing.</li>
+  <li><b>Complete proofs</b> depend only on Bitcoin. This page fetches block headers from block explorers and checks them as described above. To check without trusting any third party, use the official client with your own Bitcoin node: <a href="{{root}}guides/verify-an-opentimestamps-proof/">verify a proof yourself</a>.</li>
+  <li><b>This site</b> serves the code that fingerprints your file. The code is <a href="{{repo_url}}">open source</a>, and the proof it produces is a standard file anyone can check with other tools.</li>
+</ul>
+
+<h2 id="check">Check for yourself that your video isn't uploaded</h2>
+<p>Every page carries a Content Security Policy that your browser enforces. It allows scripts only from this site and network requests only to the calendars and block explorers listed in it:</p>
+<pre><code>{{csp}}</code></pre>
+<p>To watch it, open your browser's developer tools (F12, or Cmd+Option+I on a Mac), choose the Network tab and stamp a file. You'll see three small requests to the calendars, 32 bytes each, and nothing else. {{privacy_line}}</p>
+
+<h2>Check links</h2>
+<p>A check link carries the whole proof, plus the file name and size you stamped, after the <code>#</code> in the address. Browsers don't send that part to any server. Anyone with the link can see the file's name, size and fingerprint, so share it where you'd share the file's name.</p>
+
+<h2>Contact</h2>
+<p>Bugs and questions: <a href="{{repo_url}}/issues">open an issue on GitHub</a> (issues are public).</p>

@@ -1,0 +1,40 @@
+<!--
+{
+  "path": "guides/timestamps-vs-content-credentials/",
+  "title": "Timestamps and Content Credentials (C2PA): what each proves | Existed By",
+  "description": "Content Credentials (C2PA) attach signed claims about how media was made and edited; a blockchain timestamp proves a file existed by a date. How they differ, and why footage benefits from both.",
+  "og": "home",
+  "nav": "guides/",
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Timestamps and Content Credentials (C2PA)",
+      "url": "{{site_url}}/guides/timestamps-vs-content-credentials/",
+      "datePublished": "2026-11-22",
+      "dateModified": "2026-11-22",
+      "author": {"@type": "Organization", "name": "Existed By"},
+      "publisher": {"@type": "Organization", "name": "Existed By"}
+    }
+  ]
+}
+-->
+<h1>Timestamps and Content Credentials</h1>
+<p class="lede">They answer different questions. Content Credentials say how a piece of media was made and changed, according to whoever signed them. A timestamp says a particular file existed by a particular time, according to Bitcoin.</p>
+
+<h2>Content Credentials (C2PA)</h2>
+<p>The <a href="https://c2pa.org/">Coalition for Content Provenance and Authenticity</a> (C2PA) publishes an open standard for attaching provenance information to media. In its own words, Content Credentials “function like a nutrition label for digital content”: cryptographically signed statements about the capturing device or software, edits, and who signed them, carried with the file. You can inspect them with the <a href="https://contentcredentials.org/verify">Content Credentials verify tool</a>.</p>
+<ul>
+  <li><b>Strength:</b> rich detail about origin and edit history, signed by a camera, app or organisation.</li>
+  <li><b>Limits:</b> you trust the signer; the credentials travel in the file's metadata, which some apps and platforms remove when they re-save a file; and most footage in circulation doesn't have them yet.</li>
+</ul>
+
+<h2>Timestamps (OpenTimestamps)</h2>
+<ul>
+  <li><b>Strength:</b> anyone can create one, for any file, for free; nobody can backdate it; verifying it needs only Bitcoin, not trust in a company or a signer.</li>
+  <li><b>Limits:</b> it says nothing about the content, the device or the author; it covers one exact file, so re-encoded copies don't match.</li>
+</ul>
+
+<h2>Together</h2>
+<p>A timestamp can cover a file that carries Content Credentials, fixing the whole thing, signatures included, in time. That answers a question the credentials alone can't: whether the signed file existed before a dispute or a manipulated version appeared. If a file has credentials, stamp it as it is, without re-saving it, so the credentials stay intact.</p>
+<p class="btn-row"><a class="btn" href="{{root}}">Stamp a file</a></p>

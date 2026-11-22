@@ -1,0 +1,49 @@
+<!--
+{
+  "path": "guides/why-reuploaded-videos-dont-match/",
+  "title": "Why a re-uploaded video doesn't match its timestamp | Existed By",
+  "description": "Video platforms and messaging apps re-encode uploads, so a downloaded copy has a different fingerprint from the original. What a mismatch means, and what to ask for instead.",
+  "og": "check",
+  "nav": "guides/",
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Why a re-uploaded video doesn't match its timestamp",
+      "url": "{{site_url}}/guides/why-reuploaded-videos-dont-match/",
+      "datePublished": "2026-11-22",
+      "dateModified": "2026-11-22",
+      "author": {"@type": "Organization", "name": "Existed By"},
+      "publisher": {"@type": "Organization", "name": "Existed By"}
+    }
+  ]
+}
+-->
+<h1>Why a re-uploaded video doesn't match its timestamp</h1>
+<p class="lede">You downloaded a video, checked it against its proof, and it doesn't match. Most of the time that doesn't mean anyone tampered with it. It means you have a different file.</p>
+
+<h2>Fingerprints match exact bytes</h2>
+<p>A timestamp proof covers a file's SHA-256 fingerprint. Change any byte and the fingerprint changes completely, with no “nearly matching”. That's what makes a match meaningful, and it's also why a match is easy to lose.</p>
+
+<h2>Most copies aren't the original file</h2>
+<ul>
+  <li><b>Video platforms and social networks</b> re-encode uploads into their own formats and sizes, and usually remove metadata. What you download is a new file made from the original.</li>
+  <li><b>Messaging apps</b> often compress videos before sending them, unless they're sent as a document or file.</li>
+  <li><b>Editing apps</b> write a new file on export, even if you changed nothing.</li>
+  <li><b>Screen recordings</b> of a video are new videos.</li>
+</ul>
+<p>Every one of these copies can look identical to the eye and still have a different fingerprint.</p>
+
+<h2>What a mismatch means</h2>
+<ul>
+  <li>It <b>doesn't</b> show the video was doctored.</li>
+  <li>It <b>does</b> show this proof can't vouch for this copy.</li>
+</ul>
+<p>To use the proof, ask whoever stamped it for the original file, sent in a way that keeps it intact: a cloud storage link, a file transfer service, or a messaging app's “send as file” option. Then <a href="{{root}}check/">check that file</a>.</p>
+
+<h2>What about “perceptual” matching?</h2>
+<p>Some systems compare how videos look rather than their bytes, so a re-encoded copy still matches. They're useful for finding copies, but they can also match a cleverly edited version, so they can't show a file is unchanged. Existed By deliberately uses exact fingerprints only.</p>
+
+<h2>If you're the one stamping</h2>
+<p>Stamp the original file from the device, before you send it anywhere, and keep it. If you also stamp the version you publish, you can show both: the original existed by one time, and the published edit by another.</p>
+<p class="btn-row"><a class="btn" href="{{root}}check/">Check a proof</a></p>

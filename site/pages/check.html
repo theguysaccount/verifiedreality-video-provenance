@@ -1,0 +1,64 @@
+<!--
+{
+  "path": "check/",
+  "title": "Check a timestamp proof | Existed By",
+  "description": "Open an OpenTimestamps proof (.ots) or a check link, verify it against Bitcoin, and compare your copy of the file. Files are read on your device, never uploaded.",
+  "og": "check",
+  "nav": "check/",
+  "scripts": ["check.js"],
+  "body_class": "app"
+}
+-->
+<noscript><p class="check bad">The check page needs JavaScript to read the proof. Files are read on your device and not uploaded.</p></noscript>
+
+<section id="opener">
+  <h1>Check a timestamp proof</h1>
+  <p class="lede">Open the check link you were sent, or choose the proof file (.ots). Add the video too, to check that your copy is the stamped file. Everything is read on your device.</p>
+  <div id="drop" class="drop">
+    <p><label class="btn big" for="files">Choose the proof (and the video)</label><input id="files" class="sr" type="file" multiple></p>
+    <p class="small">or drop them here. Proofs from the official OpenTimestamps client work too.</p>
+  </div>
+  <p id="error" class="check bad" role="alert" hidden></p>
+  <p>No proof to hand? <a href="{{sample_link}}">Open the sample proof</a>.</p>
+</section>
+
+<section id="report" hidden>
+  <p class="eyebrow">Timestamp proof</p>
+  <h1 id="r-name" tabindex="-1"></h1>
+  <p id="r-meta" class="small"></p>
+
+  <p id="r-status" class="check" role="status"></p>
+  <p><button id="again" class="btn small" type="button" hidden>Check again</button></p>
+
+  <div class="limits">
+    <h2>What this does and doesn't show</h2>
+    <p>A verified timestamp shows that the file with this fingerprint existed no later than the time above. It doesn't show who made the file, where, or that what it shows is true. It applies only to the exact file: compare your copy below.</p>
+  </div>
+
+  <h2>Is your copy the stamped file?</h2>
+  <div id="copy-drop" class="drop small-drop">
+    <p><label class="btn secondary" for="copy">Choose your copy of the video</label><input id="copy" class="sr" type="file"></p>
+    <p class="small">or drop it here. It's fingerprinted on your device and compared with the proof.</p>
+    <progress id="copy-progress" max="1" value="0" hidden aria-label="Fingerprinting progress"></progress>
+  </div>
+  <p id="copy-result" class="check" role="status" hidden></p>
+
+  <h2>The proof</h2>
+  <ul class="facts">
+    <li>Fingerprint of the stamped file (<span id="r-hash-name"></span>): <span id="r-hash" class="mono break"></span></li>
+    <li>Opened from: <span id="r-source"></span></li>
+    <li>Calendars still holding a pending part: <ul id="r-calendars"></ul></li>
+  </ul>
+  <div id="r-block-wrap" hidden><h3>Bitcoin block</h3><ul id="r-block" class="facts"></ul></div>
+  <div class="btn-row">
+    <button id="r-download" class="btn" type="button">Download the proof (.ots)</button>
+    <button id="r-copy" class="btn secondary" type="button">Copy check link</button>
+  </div>
+  <p><input id="r-link" class="mono" type="text" readonly aria-label="Check link"></p>
+  <p id="r-link-note" class="small"></p>
+  <p class="small">To verify without trusting this site or the block explorers, use the official client with your own Bitcoin node: <a href="{{root}}guides/verify-an-opentimestamps-proof/">how</a>.</p>
+  <div class="btn-row">
+    <button id="another" class="btn secondary" type="button">Check another proof</button>
+    <a class="btn" href="{{root}}">Stamp your own video</a>
+  </div>
+</section>

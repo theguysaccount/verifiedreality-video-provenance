@@ -1,0 +1,45 @@
+<!--
+{
+  "path": "guides/verify-an-opentimestamps-proof/",
+  "title": "How to verify an OpenTimestamps proof yourself | Existed By",
+  "description": "Verify a .ots timestamp proof with the official OpenTimestamps client and your own Bitcoin node, trusting no website or block explorer. Also: completing a pending proof.",
+  "og": "check",
+  "nav": "guides/",
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "How to verify an OpenTimestamps proof yourself",
+      "url": "{{site_url}}/guides/verify-an-opentimestamps-proof/",
+      "step": [
+        {"@type": "HowToStep", "name": "Install the client", "text": "pip3 install opentimestamps-client"},
+        {"@type": "HowToStep", "name": "Complete a pending proof", "text": "ots upgrade video.mp4.ots"},
+        {"@type": "HowToStep", "name": "Verify against your Bitcoin node", "text": "Put the original file next to its proof and run ots verify video.mp4.ots"}
+      ]
+    }
+  ]
+}
+-->
+<h1>Verify a timestamp proof yourself</h1>
+<p class="lede">The check page on this site verifies proofs using block headers from public block explorers. If you'd rather trust nobody but Bitcoin, verify with the official OpenTimestamps client and your own node.</p>
+
+<h2>What you need</h2>
+<ul>
+  <li>The original file and its proof (<code>video.mp4</code> and <code>video.mp4.ots</code>). A check link from this site holds the proof: open it and choose “Download the proof”.</li>
+  <li>Python 3 and the <a href="https://github.com/opentimestamps/opentimestamps-client">OpenTimestamps client</a>.</li>
+  <li>For verifying: a Bitcoin Core node. The client's documentation says a pruned node is fine.</li>
+</ul>
+
+<h2>Steps</h2>
+<ol>
+  <li>Install the client: <pre><code>pip3 install opentimestamps-client</code></pre></li>
+  <li>If the proof is still pending, complete it by asking the calendars named inside it: <pre><code>ots upgrade video.mp4.ots</code></pre> When the calendars have anchored it in Bitcoin, the client reports that the timestamp is complete.</li>
+  <li>Verify it. With the original file next to the proof: <pre><code>ots verify video.mp4.ots</code></pre> The client hashes the file, follows the proof to a Bitcoin block using your node, and reports the block and date, for example: <code>Success! Bitcoin block 358391 attests existence as of 2015-05-28</code>.</li>
+</ol>
+<p>The client's own README has more options, including how to point it at a node with different settings.</p>
+
+<h2>What “attests existence as of” means</h2>
+<p>The file existed no later than that block was mined. Block timestamps are only <a href="https://en.bitcoin.it/wiki/Block_timestamp">accurate to within an hour or two</a>, so treat the time as approximate.</p>
+
+<h2>Without a node</h2>
+<p>The <a href="{{root}}check/">check page</a> does the same calculation in your browser. It fetches the block header from two block explorers, checks they agree and that the header has real Bitcoin proof of work, and checks the proof leads to it. That's a strong check, but you're relying on the explorers to give you the block at the right height. A node removes that reliance.</p>

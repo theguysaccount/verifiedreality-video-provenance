@@ -1,0 +1,50 @@
+<!--
+{
+  "path": "guides/prove-a-video-is-original/",
+  "title": "How to prove a video is the original (and what you can't prove) | Existed By",
+  "description": "You can prove a video file existed, unchanged, by a certain date. You can't prove from the file alone that it's true. The habits that make footage defensible: originals, fingerprints, timestamps, notes.",
+  "og": "home",
+  "nav": "guides/",
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "How to prove a video is the original",
+      "url": "{{site_url}}/guides/prove-a-video-is-original/",
+      "datePublished": "2026-11-22",
+      "dateModified": "2026-11-22",
+      "author": {"@type": "Organization", "name": "Existed By"},
+      "publisher": {"@type": "Organization", "name": "Existed By"}
+    }
+  ]
+}
+-->
+<h1>How to prove a video is the original</h1>
+<p class="lede">“Original” can mean two things: the first, unmodified file, or footage of something that really happened. You can prove a lot about the first. The second needs more than any file can carry.</p>
+
+<h2>What you can prove</h2>
+<ul>
+  <li><b>That a file is unchanged.</b> A fingerprint (SHA-256 hash) of the file matches only that exact file. If your copy matches a fingerprint published earlier, it's the same file, byte for byte.</li>
+  <li><b>That it existed by a date.</b> A timestamp anchored in a public block chain, like an <a href="https://opentimestamps.org/">OpenTimestamps</a> proof, shows the fingerprint existed no later than a given block. Nobody, including you, can backdate it.</li>
+  <li><b>Its order relative to other versions.</b> If your file was stamped before an edited or AI-altered version circulated, your version can't have been made from that one.</li>
+</ul>
+
+<h2>What you can't prove from the file alone</h2>
+<ul>
+  <li><b>That it shows what really happened.</b> A staged or generated video stamped today is still staged or generated.</li>
+  <li><b>Who recorded it, or where.</b> File metadata (camera model, GPS) is easy to edit. Content Credentials, where present, add signed claims about capture and edits; see <a href="../timestamps-vs-content-credentials/">timestamps and Content Credentials</a>.</li>
+  <li><b>When it was recorded</b>, as opposed to when it existed by. Stamp as soon after recording as you can to close that gap.</li>
+</ul>
+
+<h2>Habits that make footage defensible</h2>
+<ol>
+  <li><b>Keep the original file untouched.</b> Copy it off the device as it is. Edit copies, never the original. Messaging apps and social platforms re-encode what you send, so the copy they deliver isn't your original.</li>
+  <li><b>Stamp it early.</b> <a href="{{root}}">Stamp the original</a> as soon as you have it, before you share or edit anything. Keep the .ots proof next to the file.</li>
+  <li><b>Write down the circumstances.</b> Who recorded it, on what device, where and when, and who has handled the file since. Stamp those notes too.</li>
+  <li><b>Publish the fingerprint with the footage.</b> Posting the check link, or just the SHA-256, alongside a video lets anyone holding the original confirm it later.</li>
+  <li><b>When challenged, offer the original and the proof.</b> Anyone can check them on this site or with the official client, without trusting you or this site.</li>
+</ol>
+
+<h2>When the question is “is this real?”</h2>
+<p>Timestamps and fingerprints answer “is this the same file, and how old is it at least?”. Whether events happened as shown is a job for corroboration: other footage of the same moment, witnesses, location and weather checks, and the person who recorded it. A timestamp helps by ruling out later fabrication of the file itself.</p>
+<p class="btn-row"><a class="btn" href="{{root}}">Stamp a video</a></p>
