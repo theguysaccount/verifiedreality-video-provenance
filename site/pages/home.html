@@ -74,10 +74,16 @@
   </div>
 </section>
 
-<section id="mine-wrap" hidden>
+<section id="mine-wrap">
   <h2>Your stamps in this browser</h2>
+  <p id="mine-empty" class="small">None yet. Stamps you make here are listed, with their proofs, in this browser only.</p>
   <ul id="mine" class="mine"></ul>
   <p class="small">Kept in this browser's storage only. Pending stamps complete themselves when you come back after a few hours. Download each proof: clearing your browser deletes this list.</p>
+  <div class="btn-row tight">
+    <button id="export-list" class="btn small secondary" type="button" hidden>Export my list</button>
+    <label class="btn small secondary" for="import-list">Import a list</label><input id="import-list" class="sr" type="file" accept=".json,application/json">
+  </div>
+  <p id="import-msg" class="small" role="status"></p>
 </section>
 
 <section>

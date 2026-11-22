@@ -46,6 +46,8 @@ node scripts/e2e.mjs --screens              # refresh docs/screens/
 
 Handled by the domain rollout session; this is what it needs. Candidates (RDAP, 22 Nov 2026): `existedby.com` and `existedby.org` are unregistered.
 
+**First, warn anyone using the old address.** Browser storage belongs to a web address, and once the custom domain is set the github.io address redirects to it, so what visitors saved there can't be opened at the new one. Set `MOVE_NOTICE_URL` to the new address and redeploy: every page then tells visitors how to keep their list of stamps (Export my list, then Import a list at the new address). `~/.local/bin/gh variable set MOVE_NOTICE_URL -R theguysaccount/verifiedreality-video-provenance --body https://D/` then `~/.local/bin/gh workflow run pages.yml -R theguysaccount/verifiedreality-video-provenance`. Leave it a couple of weeks if the site has users (analytics, issues), then switch, and afterwards `~/.local/bin/gh variable delete MOVE_NOTICE_URL -R theguysaccount/verifiedreality-video-provenance` and redeploy.
+
 Steps for a domain `D` (apex):
 1. DNS: `A @` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`; `AAAA @` → `2606:50c0:8000::153`, `2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153`; `CNAME www` → `theguysaccount.github.io`. (Subdomain: one `CNAME` → `theguysaccount.github.io`.)
 2. `~/.local/bin/gh api -X PUT repos/theguysaccount/verifiedreality-video-provenance/pages -f cname=D`, wait for the certificate, then `~/.local/bin/gh api -X PUT repos/theguysaccount/verifiedreality-video-provenance/pages -F https_enforced=true`.

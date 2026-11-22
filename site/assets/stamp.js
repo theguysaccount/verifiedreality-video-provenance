@@ -3,7 +3,7 @@
 import { startProof } from "./ots.js";
 import { submit, upgrade, STAMP_CALENDARS } from "./net.js";
 import { Sha256, fromHex, toHex } from "./hashes.js";
-import { linkFragment, proofName, saveStamp, loadStamps, updateStamp, removeStamp, fileOf, isComplete } from "./proofs.js";
+import { linkFragment, proofName, saveStamp, loadStamps, updateStamp, removeStamp, fileOf, isComplete, exportList, validStamps, importStamps } from "./proofs.js";
 import { CFG, $, h, track, fmtDateTime, fmtBytes, copyText, downloadBytes } from "./common.js";
 
 const UPGRADE_AFTER_MS = 2 * 60 * 60 * 1000; // calendars need a few hours to reach Bitcoin
@@ -136,7 +136,8 @@ function showResult(ok, saved) {
 
 function renderMine() {
   const list = loadStamps();
-  $("#mine-wrap").hidden = list.length === 0;
+  $("#mine-empty").hidden = list.length > 0;
+  $("#export-list").hidden = list.length === 0;
   $("#mine").replaceChildren(...list.map((s) => {
     let file = null;
     try {
@@ -216,6 +217,24 @@ $("#r-share").addEventListener("click", async () => {
     await navigator.share({ title: "Timestamp proof", text: `Check that "${current.name}" existed by the time it was stamped:`, url: $("#r-link").value });
     track("link_share");
   } catch { /* cancelled */ }
+});
+$("#export-list").addEventListener("click", () => {
+  downloadBytes(`existed-by-stamps-${new Date().toISOString().slice(0, 10)}.json`, new TextEncoder().encode(exportList()), "application/json");
+  track("list_export");
+});
+$("#import-list").addEventListener("change", async (e) => {
+  const f = e.target.files[0];
+  e.target.value = "";
+  if (!f) return;
+  const msg = $("#import-msg");
+  try {
+    const n = importStamps(validStamps(await f.text()));
+    msg.textContent = n < 0 ? "This browser can't save the list (storage is full or switched off)." : `Added ${n} ${n === 1 ? "stamp" : "stamps"} to this browser's list.`;
+    renderMine();
+    track("list_import");
+  } catch (err) {
+    msg.textContent = err.message || "That file couldn't be read.";
+  }
 });
 $("#r-another").addEventListener("click", () => {
   show("#drop");

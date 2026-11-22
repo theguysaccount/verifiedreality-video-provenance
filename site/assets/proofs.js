@@ -99,3 +99,43 @@ export const fileOf = (stamp) => OtsFile.parse(fromBase64Url(stamp.ots));
 export function isComplete(file) {
   return summarize(file).bitcoin.length > 0;
 }
+
+// ---------- moving the list (another device, or a new web address) ----------
+
+export const LIST_FORMAT = "existed-by-stamps";
+
+/** The whole list as a file's text. */
+export function exportList(list = loadStamps()) {
+  return JSON.stringify({ format: LIST_FORMAT, version: 1, exported: new Date().toISOString(), stamps: list }, null, 1) + "\n";
+}
+
+/** Entries from an exported file that hold a proof this page can read; anything else is dropped. */
+export function validStamps(text) {
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    throw new OtsError("This isn't an exported list of stamps.");
+  }
+  if (!data || data.format !== LIST_FORMAT || !Array.isArray(data.stamps)) throw new OtsError("This isn't an exported list of stamps.");
+  const out = [];
+  for (const s of data.stamps.slice(0, MAX_STAMPS)) {
+    try {
+      if (!s || typeof s.id !== "string" || !/^[0-9a-f]{8,32}$/.test(s.id) || typeof s.ots !== "string") continue;
+      const file = OtsFile.parse(fromBase64Url(s.ots));
+      out.push({ id: s.id, name: cleanName(s.name), size: Number.isSafeInteger(s.size) ? s.size : null, type: String(s.type || "").slice(0, 100),
+        sha256: toHex(file.digest), stampedAt: Number.isFinite(s.stampedAt) ? s.stampedAt : null, ots: toBase64Url(file.serialize()) });
+    } catch {
+      /* a damaged entry is skipped */
+    }
+  }
+  return out;
+}
+
+/** Add imported stamps to this browser's list; entries already there are kept as they are. */
+export function importStamps(entries) {
+  const list = loadStamps();
+  const have = new Set(list.map((s) => s.id));
+  const added = entries.filter((s) => !have.has(s.id));
+  return saveAll([...list, ...added].sort((a, b) => (b.stampedAt || 0) - (a.stampedAt || 0))) ? added.length : -1;
+}

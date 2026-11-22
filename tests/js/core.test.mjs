@@ -263,3 +263,17 @@ test("upgrading asks only known calendars and merges a Bitcoin path when one is 
   assert.equal(r2.upgraded, 1);
   assert.deepEqual(summarize(OtsFile.parse(file.serialize())).bitcoin.map((b) => b.height), [900000]);
 });
+
+test("an exported list of stamps imports again, and junk in it is dropped", async () => {
+  const { exportList, validStamps } = await import("../../site/assets/proofs.js");
+  const { file, tip } = startProof(sha256(bytes("moving")), crypto.randomBytes(16));
+  tip.merge(Timestamp.fromBytes(calendarAnswer(tip.msg, "https://bob.btc.calendar.opentimestamps.org", "b"), tip.msg));
+  const good = { id: "0123456789abcdef", name: "clip.mp4", size: 10, type: "video/mp4", sha256: "ignored", stampedAt: 1763800000000, ots: toBase64Url(file.serialize()) };
+  const text = exportList([good, { id: "zz", ots: "AAAA" }, { id: "fedcba9876543210", ots: "AAAA" }, null]);
+  const back = validStamps(text);
+  assert.equal(back.length, 1);
+  assert.equal(back[0].sha256, toHex(file.digest), "the fingerprint comes from the proof, not the file's claim");
+  assert.equal(back[0].ots, good.ots);
+  assert.throws(() => validStamps("{}"), /isn't an exported list/);
+  assert.throws(() => validStamps("not json"), /isn't an exported list/);
+});

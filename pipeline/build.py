@@ -63,6 +63,10 @@ class Site:
         self.site_url = os.environ.get("SITE_URL", "").strip().rstrip("/") or DEFAULT_SITE_URL
         self.goatcounter = os.environ.get("GOATCOUNTER_URL", "").strip()
         self.newsroom = os.environ.get("NEWSROOM_URL", "").strip()
+        move = os.environ.get("MOVE_NOTICE_URL", "").strip()
+        if move and not re.match(r'^https://[a-z0-9.-]+\.[a-z]{2,}(/[^\s"<>]*)?$', move, re.I):
+            raise SystemExit(f"MOVE_NOTICE_URL must be an https address, got {move!r}")
+        self.move_notice = move
         self.commit = os.environ.get("GITHUB_SHA", "").strip() or "local"
         h = hashlib.sha1()
         for p in sorted((ROOT / "site").rglob("*")):
@@ -73,6 +77,13 @@ class Site:
         self.indexable = []
 
     # ----- helpers -----
+    def move_banner(self):
+        """Shown on every page while MOVE_NOTICE_URL is set, a few weeks before a domain move."""
+        if not self.move_notice:
+            return ""
+        url = attr(self.move_notice)
+        return '<aside class="move-notice" role="note"><p>' + 'Existed By is moving to <a href="{url}">{url}</a>. The list of stamps on the home page is kept in your browser for this address only. Use “Export my list” there (or download each proof), then import the list at the new address. Proofs and check links you already have keep working.'.replace("{url}", url) + '</p></aside>\n'
+
     def sample_proof(self):
         return (ROOT / "site" / "data" / "sample-clip.webm.ots").read_bytes()
 
@@ -188,7 +199,7 @@ class Site:
 <nav class="nav" aria-label="Main">{nav}</nav>
 </div></header>
 <main id="main" class="wrap">
-{body}
+{self.move_banner()}{body}
 </main>
 <footer class="site-foot"><div class="wrap">
 <nav aria-label="Footer">{foot}<a href="{REPO_URL}">Source code</a></nav>

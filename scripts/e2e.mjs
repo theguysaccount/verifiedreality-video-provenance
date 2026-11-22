@@ -92,6 +92,21 @@ await step("stamp: the file is fingerprinted here and only a blinded digest goes
   await shot(page, "stamped-desktop", { fullPage: true });
 });
 
+await step("list: an exported list of stamps imports into a fresh browser", async () => {
+  const got = await page.eval("window.__existedBy");
+  const { exportList } = await import("../site/assets/proofs.js");
+  const { toBase64Url } = await import("../site/assets/proofs.js");
+  const listFile = path.join(tmp, "existed-by-stamps.json");
+  fs.writeFileSync(listFile, exportList([{ id: "abcdef0123456789", name: "moved-clip.webm", size: 12, type: "video/webm", stampedAt: Date.now(), ots: toBase64Url(Uint8Array.from(got.lastProof)) }]));
+  const fresh = await browser.newPage();
+  await fresh.goto(base);
+  await fresh.eval("localStorage.clear()");
+  await fresh.goto(base);
+  await fresh.setFile("#import-list", listFile);
+  await fresh.waitFor("/Added 1 stamp/.test(document.querySelector('#import-msg').textContent)", "the import");
+  assert.match(await fresh.eval("document.querySelector('#mine').textContent"), /moved-clip\.webm/);
+});
+
 await step("check link: opens the proof as pending and compares copies", async () => {
   await page.goto(base + "check/" + link.slice(link.indexOf("#")));
   await page.waitFor("['pending','complete'].includes(document.body.dataset.status)", "the status", 60000);
